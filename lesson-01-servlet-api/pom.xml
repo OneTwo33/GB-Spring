@@ -44,7 +44,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <url>http://localhost:8080/manager/text</url>
+                    <url>http://194.67.111.234:8080/manager/text</url>
                     <username>manager</username>
                     <password>123qwerty=</password>
                     <path>/servlet-app</path>
