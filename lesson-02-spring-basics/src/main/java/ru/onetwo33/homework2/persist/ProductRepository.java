@@ -1,4 +1,6 @@
-package ru.onetwo33.persist;
+package ru.onetwo33.homework2.persist;
+
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Repository
 public class ProductRepository {
 
     private final Map<Long, Product> productMap = new ConcurrentHashMap<>();
