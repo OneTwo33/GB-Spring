@@ -9,9 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(urlPatterns = "/product")
+@WebServlet(urlPatterns = "/product/*")
 public class ProductServlet extends HttpServlet {
 
     private ProductRepository productRepository;
@@ -23,21 +24,33 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Product> products = productRepository.findAll();
 
-        resp.getWriter().println("<table border=\"1\">");
-            resp.getWriter().println("<tr>");
-                resp.getWriter().println("<th>ID</th>");
-                resp.getWriter().println("<th>Title</th>");
-                resp.getWriter().println("<th>Cost</th>");
-            resp.getWriter().println("</tr>");
+        PrintWriter pw = resp.getWriter();
+
+        if (req.getPathInfo() == null) {
+            List<Product> products = productRepository.findAll();
+
+            pw.println("<table border=\"1\">");
+            pw.println("<tr>");
+            pw.println("<th>ID</th>");
+            pw.println("<th>Title</th>");
+            pw.println("<th>Cost</th>");
+            pw.println("</tr>");
             for (Product product : products) {
-                resp.getWriter().println("<tr>");
-                    resp.getWriter().println("<td>" + product.getId() + "</td>");
-                    resp.getWriter().println("<td>" + product.getName() + "</td>");
-                    resp.getWriter().println("<td>" + product.getCost() + "</td>");
-                resp.getWriter().println("</tr>");
+                pw.println("<tr>");
+                pw.println("<td>" + product.getId() + "</td>");
+                pw.println("<td><a href='" + req.getContextPath() + req.getServletPath() + "/" + product.getId() + "'>" + product.getName() + "</a></td>");
+                pw.println("<td>" + product.getCost() + "</td>");
+                pw.println("</tr>");
             }
-        resp.getWriter().println("</table>");
+            pw.println("</table>");
+        } else {
+            Long id = Long.parseLong(req.getPathInfo().substring(1)); // Уберем дробь "/" перед id
+            Product product = productRepository.findById(id);
+
+            pw.println("<h1>Карточка товара: " + product.getName() + "</h1>");
+            pw.println("<p>ID: " + product.getId() + "</p>");
+            pw.println("<p>Цена: " + product.getCost() + "</p>");
+        }
     }
 }
