@@ -41,15 +41,9 @@ public class Cart {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Cart ");
-        sb.append(this.getId());
-        sb.append(": [");
-        for (Product product : products) {
-            sb.append(product.toString());
-            sb.append(",\n");
-        }
-        sb.append("]");
-        return sb.toString();
+        return "Cart{" +
+                "id=" + id +
+                ", products=" + products +
+                '}';
     }
 }
