@@ -15,6 +15,8 @@ public class Main {
         // ApplicationContext context = new ClassPathXmlApplicationContext("spring-context.xml");
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         Camera camera = context.getBean("camera", Camera.class);
+        BlockOfCameras cameras = context.getBean("blockOfCameras", BlockOfCameras.class);
         camera.doPhotography();
+        cameras.doPhotos();
     }
 }

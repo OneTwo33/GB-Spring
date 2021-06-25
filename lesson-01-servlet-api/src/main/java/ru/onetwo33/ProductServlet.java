@@ -1,7 +1,7 @@
 package ru.onetwo33;
 
 import ru.onetwo33.persist.Product;
-import ru.onetwo33.persist.ProductRepository;
+import ru.onetwo33.persist.ProductRepositoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,11 +15,11 @@ import java.util.List;
 @WebServlet(urlPatterns = "/product/*")
 public class ProductServlet extends HttpServlet {
 
-    private ProductRepository productRepository;
+    private ProductRepositoryImpl productRepository;
 
     @Override
     public void init() throws ServletException {
-        productRepository = (ProductRepository) getServletContext().getAttribute("productRepository");
+        productRepository = (ProductRepositoryImpl) getServletContext().getAttribute("productRepository");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ProductServlet extends HttpServlet {
             }
             pw.println("</table>");
         } else {
-            Long id = Long.parseLong(req.getPathInfo().substring(1)); // Уберем дробь "/" перед id
+            long id = Long.parseLong(req.getPathInfo().substring(1)); // Уберем дробь "/" перед id
             Product product = productRepository.findById(id);
 
             pw.println("<h1>Карточка товара: " + product.getName() + "</h1>");

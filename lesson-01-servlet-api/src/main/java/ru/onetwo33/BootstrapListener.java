@@ -1,7 +1,7 @@
 package ru.onetwo33;
 
 import ru.onetwo33.persist.Product;
-import ru.onetwo33.persist.ProductRepository;
+import ru.onetwo33.persist.ProductRepositoryImpl;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -15,7 +15,7 @@ public class BootstrapListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext sc = sce.getServletContext();
 
-        ProductRepository productRepository = new ProductRepository();
+        ProductRepositoryImpl productRepository = new ProductRepositoryImpl();
         productRepository.save(new Product(1L, "Product 1", 12.44F));
         productRepository.save(new Product(2L, "Product 2", 13.45F));
         productRepository.save(new Product(3L, "Product 3", 5.67F));

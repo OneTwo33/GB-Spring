@@ -2,7 +2,7 @@ package ru.onetwo33;
 
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class BlackAndWhiteCameraRoll implements CameraRoll {
 
     @Override
