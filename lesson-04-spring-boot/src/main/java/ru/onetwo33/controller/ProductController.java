@@ -49,11 +49,27 @@ public class ProductController {
         return "product_form";
     }
 
+    @GetMapping("/{id}/delete")
+    public String deleteProduct(@PathVariable("id") Long id, Model model) {
+        logger.info("Delete product page requested");
+        model.addAttribute("product", productRepository.findById(id));
+
+        return "product_delete";
+    }
+
     @PostMapping
     public String update(Product product) {
         logger.info("Saving product");
 
         productRepository.save(product);
+        return "redirect:/product";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long id) {
+        logger.info("Delete product");
+
+        productRepository.delete(id);
         return "redirect:/product";
     }
 }
