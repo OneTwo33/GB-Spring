@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.onetwo33.persist.User;
 import ru.onetwo33.persist.UserRepository;
 
-import java.util.Optional;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/user")
