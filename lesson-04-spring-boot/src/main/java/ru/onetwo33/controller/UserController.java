@@ -47,9 +47,17 @@ public class UserController {
     public String editUser(@PathVariable("id") Long id, Model model) {
         logger.info("Edit user page requested");
 
-        model.addAttribute("product", userRepository.findById(id)
+        model.addAttribute("user", userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found")));
-        return "product_form";
+        return "user_form";
+    }
+
+    @DeleteMapping
+    public String deleteUser(@PathVariable("id") Long id) {
+        logger.info("Deleting user with id {}", id);
+
+        userRepository.delete(id);
+        return "redirect:/user";
     }
 
     @PostMapping

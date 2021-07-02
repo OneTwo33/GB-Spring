@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.onetwo33.persist.User;
 import ru.onetwo33.persist.UserRepository;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller

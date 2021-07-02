@@ -52,8 +52,10 @@
                     <th scope="row" th:text="${user.id}">1</th>
                     <td th:text="${user.username}">Alex</td>
                     <td>
-                        <a class="btn btn-success" href="user_form.html"><i class="fas fa-edit"></i></a>
-                        <a class="btn btn-danger" href="#"><i class="far fa-trash-alt"></i></a>
+                        <a class="btn btn-success" th:href="@{/user/{id}(id = ${user.id})}"><i class="fas fa-edit"></i></a>
+                        <form class="d-inline" th:method="delete" th:action="@{/user/{id}(id = ${user.id})}">
+                            <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
