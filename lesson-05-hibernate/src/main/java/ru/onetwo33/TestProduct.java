@@ -1,13 +1,21 @@
 package ru.onetwo33;
 
+import org.hibernate.cfg.Configuration;
 import ru.onetwo33.entity.Product;
 import ru.onetwo33.entity.ProductDao;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class TestProduct {
     public static void main(String[] args) {
-        ProductDao productDao = new ProductDao();
+
+        EntityManagerFactory emFactory = new Configuration()
+            .configure("hibernate.cfg.xml")
+            .buildSessionFactory();
+
+        ProductDao productDao = new ProductDao(emFactory);
 
         // INSERT
 
@@ -17,13 +25,15 @@ public class TestProduct {
 
         // SELECT
 
-        Product product = productDao.findById(3L);
+        Optional<Product> product = productDao.findById(3L);
         System.out.println(product);
 
         // UPDATE
 
-        product.setCost(540.30F);
-        productDao.saveOrUpdate(product);
+        if (product.isPresent()) {
+            product.get().setCost(540.30F);
+            productDao.saveOrUpdate(product.get());
+        }
         System.out.println(product);
 
         // FIND ALL

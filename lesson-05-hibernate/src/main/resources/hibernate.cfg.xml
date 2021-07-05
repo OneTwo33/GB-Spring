@@ -19,5 +19,6 @@
 
         <mapping class="ru.onetwo33.entity.User"/>
         <mapping class="ru.onetwo33.entity.Product"/>
+        <mapping class="ru.onetwo33.entity.Contact"/>
     </session-factory>
 </hibernate-configuration>

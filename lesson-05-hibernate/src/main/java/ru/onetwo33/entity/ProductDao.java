@@ -1,58 +1,79 @@
 package ru.onetwo33.entity;
 
-import org.hibernate.cfg.Configuration;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ProductDao {
 
-    EntityManagerFactory emFactory = new Configuration()
-            .configure("hibernate.cfg.xml")
-            .buildSessionFactory();
+    private final EntityManagerFactory emFactory;
 
-    EntityManager em = null;
+    public ProductDao(EntityManagerFactory emFactory) {
+        this.emFactory = emFactory;
+    }
 
-    public Product findById(Long id) {
-        em = emFactory.createEntityManager();
-
-        Product product = em.find(Product.class, id);
-
-        em.close();
-
-        return product;
+    public Optional<Product> findById(Long id) {
+        return executeForEntityManager(
+                em -> Optional.ofNullable(em.find(Product.class, id))
+        );
     }
 
     public List<Product> findAll() {
-        em = emFactory.createEntityManager();
-
-        List<Product> products = em.createQuery("select p from Product p", Product.class).getResultList();
-
-        em.close();
-        return products;
+        return executeForEntityManager(
+                em -> em.createQuery("select p from Product p", Product.class).getResultList()
+        );
     }
 
     public void deleteById(Long id) {
-        em = emFactory.createEntityManager();
-        em.getTransaction().begin();
-
-        Product product = em.getReference(Product.class, id);
-        em.remove(product);
-
-        em.getTransaction().commit();
-        em.close();
+        executeInTransaction(
+                em -> em.createQuery("delete from Product where id = :id")
+                .setParameter("id", id)
+                .executeUpdate()
+        );
     }
 
-    public Product saveOrUpdate(Product product) {
-        em = emFactory.createEntityManager();
-        em.getTransaction().begin();
+    public void insert(Product product) {
+        executeInTransaction(
+                em -> em.persist(product)
+        );
+    }
 
-        em.merge(product);
+    public void update(Product product) {
+        executeInTransaction(
+                em -> em.merge(product)
+        );
+    }
 
-        em.getTransaction().commit();
-        em.close();
+    public void saveOrUpdate(Product product) {
+        if (product.getId() == null) {
+            insert(product);
+        } else {
+            update(product);
+        }
+    }
 
-        return product;
+    private <T> T executeForEntityManager(Function<EntityManager, T> function) {
+        EntityManager em = emFactory.createEntityManager();
+        try {
+            return function.apply(em);
+        } finally {
+            em.close();
+        }
+    }
+
+    private void executeInTransaction(Consumer<EntityManager> consumer) {
+        EntityManager em = emFactory.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            consumer.accept(em);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        } finally {
+            em.close();
+        }
     }
 }
