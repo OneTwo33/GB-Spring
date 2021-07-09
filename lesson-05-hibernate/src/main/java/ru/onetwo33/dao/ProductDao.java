@@ -1,4 +1,8 @@
-package ru.onetwo33.entity;
+package ru.onetwo33.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import ru.onetwo33.entity.Product;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -7,10 +11,12 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Repository
 public class ProductDao {
 
     private final EntityManagerFactory emFactory;
 
+    @Autowired
     public ProductDao(EntityManagerFactory emFactory) {
         this.emFactory = emFactory;
     }
