@@ -1,17 +1,23 @@
 package ru.onetwo33.persist;
 
-import org.hibernate.validator.constraints.NotBlank;
-
+import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
+@Entity
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Min(value = 18)
+    @Column(name = "age", nullable = false)
     private Integer age;
 
     public User() {

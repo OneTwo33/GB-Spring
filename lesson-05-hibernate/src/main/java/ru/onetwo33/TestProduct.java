@@ -2,9 +2,10 @@ package ru.onetwo33;
 
 import org.hibernate.cfg.Configuration;
 import ru.onetwo33.entity.Product;
-import ru.onetwo33.entity.ProductDao;
+import ru.onetwo33.dao.ProductDao;
 
 import javax.persistence.EntityManagerFactory;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +20,9 @@ public class TestProduct {
 
         // INSERT
 
-        productDao.saveOrUpdate(new Product(null, "Product 1", 33.7F));
-        productDao.saveOrUpdate(new Product(null, "Product 2", 30.7F));
-        productDao.saveOrUpdate(new Product(null, "Product 3", 35.7F));
+//        productDao.saveOrUpdate(new Product(null, "Product 1", 33.7F));
+//        productDao.saveOrUpdate(new Product(null, "Product 2", 30.7F));
+//        productDao.saveOrUpdate(new Product(null, "Product 3", 35.7F));
 
         // SELECT
 
@@ -31,7 +32,7 @@ public class TestProduct {
         // UPDATE
 
         if (product.isPresent()) {
-            product.get().setCost(540.30F);
+            product.get().setCost(BigDecimal.valueOf(540.30));
             productDao.saveOrUpdate(product.get());
         }
         System.out.println(product);
