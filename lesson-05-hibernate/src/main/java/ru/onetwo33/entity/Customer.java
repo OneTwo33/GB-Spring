@@ -1,33 +1,29 @@
 package ru.onetwo33.entity;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "customers")
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 512, nullable = false)
-    private String title;
-
     @Column(nullable = false)
-    private BigDecimal cost;
+    private String name;
 
-    @OneToMany(mappedBy = "product")
-    private Set<JoinedCustomerProduct> customerProducts;
+    @OneToMany(mappedBy = "customer")
+    private Set<JoinedCustomerProduct> customerProducts = new HashSet<>();
 
-    public Product() {
+    public Customer() {
     }
 
-    public Product(Long id, String title, BigDecimal cost) {
+    public Customer(Long id, String name) {
         this.id = id;
-        this.title = title;
-        this.cost = cost;
+        this.name = name;
     }
 
     public Long getId() {
@@ -38,20 +34,12 @@ public class Product {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Set<JoinedCustomerProduct> getCustomerProducts() {
