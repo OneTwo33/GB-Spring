@@ -38,8 +38,8 @@
 
 <div class="container">
     <div class="row py-2">
-        <form action="#" th:action="@{/product/{id}/delete(id=${product.id})}" th:object="${product}" method="post">
-            <div>Вы уверены что хотите удалить товар <span th:text="${product.title}"></span>?</div>
+        <form action="#" th:action="@{/product/{id}/delete(id=${product.get().getId()})}" th:object="${product}" method="post">
+            <div>Вы уверены что хотите удалить товар <span th:text="${product.get().getTitle()}"></span>?</div>
             <div>
                 <button type="submit" class="btn btn-danger" name="submit">Удалить</button>
                 <a th:href="@{/product}" class="btn btn-default">Отмена</a>
