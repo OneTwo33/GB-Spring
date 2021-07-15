@@ -1,46 +1,16 @@
 package ru.onetwo33.persist;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class ProductRepository {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    private final Map<Long, Product> productMap = new ConcurrentHashMap<>();
-
-    private final AtomicLong identity = new AtomicLong(0);
-
-    @PostConstruct
-    public void init() {
-        this.save(new Product("Product 1", 33.25F));
-        this.save(new Product("Product 2", 18.25F));
-        this.save(new Product("Product 3", 44.25F));
-    }
-
-    public List<Product> findAll() {
-        return new ArrayList<>(productMap.values());
-    }
-
-    public Product findById(long id) {
-        return productMap.get(id);
-    }
-
-    public void save(Product product) {
-        if (product.getId() == null) {
-            long id = identity.incrementAndGet();
-            product.setId(id);
-        }
-        productMap.put(product.getId(), product);
-    }
-
-    public void delete(long id) {
-        productMap.remove(id);
-    }
-
+    List<Product> findByTitleStartsWith(String prefix);
+    List<Product> findByCostGreaterThanEqual(BigDecimal cost);
+    List<Product> findByCostLessThanEqual(BigDecimal cost);
+    List<Product> findByCostBetween(BigDecimal minCost, BigDecimal maxCost);
 }

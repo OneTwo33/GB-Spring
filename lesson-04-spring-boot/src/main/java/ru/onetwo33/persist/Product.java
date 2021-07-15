@@ -1,15 +1,26 @@
 package ru.onetwo33.persist;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "products")
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "title", nullable = false)
     private String title;
-    private Float cost;
+
+    @Column(name = "cost", nullable = false)
+    private BigDecimal cost;
 
     public Product() {
     }
 
-    public Product(String title, Float cost) {
+    public Product(String title, BigDecimal cost) {
         this.title = title;
         this.cost = cost;
     }
@@ -30,11 +41,11 @@ public class Product {
         this.title = title;
     }
 
-    public Float getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(Float cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 }

@@ -5,12 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.onetwo33.persist.Product;
 import ru.onetwo33.persist.ProductRepository;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/product")
@@ -26,10 +27,28 @@ public class ProductController {
     }
 
     @GetMapping
-    public String listPage(Model model) {
+    public String listPage(Model model,
+                           @RequestParam("titleFilter") Optional<String> titleFilter,
+                           @RequestParam("minCostFilter") Optional<BigDecimal> minCostFilter,
+                           @RequestParam("maxCostFilter") Optional<BigDecimal> maxCostFilter,
+                           @RequestParam("betweenMinCostFilter") Optional<BigDecimal> betweenMinCostFilter,
+                           @RequestParam("betweenMaxCostFilter") Optional<BigDecimal> betweenMaxCostFilter) {
         logger.info("Product list page requested");
 
-        model.addAttribute("products", productRepository.findAll());
+        List<Product> products;
+
+        if (titleFilter.isPresent()) {
+            products = productRepository.findByTitleStartsWith(titleFilter.get());
+        } else if (minCostFilter.isPresent()) {
+            products = productRepository.findByCostGreaterThanEqual(minCostFilter.get());
+        } else if (maxCostFilter.isPresent()) {
+            products = productRepository.findByCostLessThanEqual(maxCostFilter.get());
+        } else if (betweenMaxCostFilter.isPresent() && betweenMinCostFilter.isPresent()) {
+            products = productRepository.findByCostBetween(betweenMinCostFilter.get(), betweenMaxCostFilter.get());
+        } else {
+            products = productRepository.findAll();
+        }
+        model.addAttribute("products", products);
         return "products";
     }
 
@@ -69,7 +88,7 @@ public class ProductController {
     public String delete(@PathVariable("id") Long id) {
         logger.info("Delete product");
 
-        productRepository.delete(id);
+        productRepository.deleteById(id);
         return "redirect:/product";
     }
 }
