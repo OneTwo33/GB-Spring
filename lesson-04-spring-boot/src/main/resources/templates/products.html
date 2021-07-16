@@ -45,23 +45,13 @@
           <input type="text" class="form-control" id="titleFilter" th:value="${param.titleFilter}"
                  name="titleFilter" placeholder="Title filter">
         </div>
-        <button type="submit" class="btn btn-primary mb-2">Apply</button>
-      </form>
-    </div>
 
-    <div class="col-12 mt-3">
-      <form class="form-inline" th:method="get">
         <div class="form-group mb-2 mr-2">
           <label for="minCostFilter" class="sr-only">Min cost filter</label>
           <input type="number" class="form-control" id="minCostFilter" th:value="${param.minCostFilter}"
                  name="minCostFilter" placeholder="Min cost filter">
         </div>
-        <button type="submit" class="btn btn-primary mb-2">Apply</button>
-      </form>
-    </div>
 
-    <div class="col-12 mt-3">
-      <form class="form-inline" th:method="get">
         <div class="form-group mb-2 mr-2">
           <label for="maxCostFilter" class="sr-only">Max cost filter</label>
           <input type="number" class="form-control" id="maxCostFilter" th:value="${param.maxCostFilter}"
@@ -71,31 +61,33 @@
       </form>
     </div>
 
-    <div class="col-12 mt-3">
-      <form class="form-inline" th:method="get">
-        <div class="form-group mb-2 mr-2">
-          <label class="sr-only">Between cost filter</label>
-          <input type="number" class="form-control" id="betweenMinCostFilter" th:value="${param.betweenMinCostFilter}"
-                 name="betweenMinCostFilter" placeholder="Min cost between filter">
-          <input type="number" class="form-control" id="betweenMaxCostFilter" th:value="${param.betweenMaxCostFilter}"
-                 name="betweenMaxCostFilter" placeholder="Max cost between filter">
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">Apply</button>
-      </form>
-    </div>
-
     <div class="col-12">
       <table class="table table-bordered my-2">
         <thead>
         <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Title</th>
-          <th scope="col">Cost</th>
+          <th scope="col">Id
+            <a th:href="@{/product(page=${page}, size=${products.size}, titleFilter=${param.titleFilter},
+                           minCost=${param.minCost}, maxCost=${param.maxCost}, sort='id')}">
+              <i class="fa fa-sort-down"></i>
+            </a>
+          </th>
+          <th scope="col">Title
+            <a th:href="@{/product(page=${page}, size=${products.size}, titleFilter=${param.titleFilter},
+                           minCost=${param.minCost}, maxCost=${param.maxCost}, sort='title')}">
+              <i class="fa fa-sort-down"></i>
+            </a>
+          </th>
+          <th scope="col">Cost
+            <a th:href="@{/product(page=${page}, size=${products.size}, titleFilter=${param.titleFilter},
+                           minCost=${param.minCost}, maxCost=${param.maxCost}, sort='cost')}">
+              <i class="fa fa-sort-down"></i>
+            </a>
+          </th>
           <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="product : ${products}">
+        <tr th:if="${products.hasContent()}" th:each="product : ${products}">
           <th scope="row" th:text="${product.id}">1</th>
           <td th:text="${product.title}">Alex</td>
           <td th:text="${product.cost}">1.01</td>
@@ -104,8 +96,42 @@
             <a class="btn btn-danger" th:href="@{/product/{id}/delete(id = ${product.id})}"><i class="far fa-trash-alt"></i></a>
           </td>
         </tr>
+
+        <tr th:unless="${products.hasContent()}">
+          <td colspan="4">No data</td>
+        </tr>
+
         </tbody>
       </table>
+    </div>
+
+    <div class="col-12">
+      <nav aria-label="...">
+        <ul class="pagination">
+          <li class="page-item"
+            th:classappend="${page <= 1} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/product(page=${page - 1}, size=${products.size}, titleFilter=${param.titleFilter},
+                           minCost=${param.minCost}, maxCost=${param.maxCost}, sort=${param.sort})}" tabindex="-1">Previous</a>
+          </li>
+
+          <li th:each="num : ${#numbers.sequence(1, products.totalPages)}"
+              th:classappend="${num == products.number + 1} ? 'active'"
+              class="page-item">
+            <a class="page-link"
+               th:text="${num}"
+               th:href="@{/product(page=${num}, size=${products.size}, titleFilter=${param.titleFilter},
+                           minCost=${param.minCost}, maxCost=${param.maxCost}, sort=${param.sort})}">1</a>
+          </li>
+
+          <li class="page-item"
+            th:classappend="${page == products.totalPages} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/product(page=${page + 1}, size=${products.size}, titleFilter=${param.titleFilter},
+                           minCost=${param.minCost}, maxCost=${param.maxCost}, sort=${param.sort})}">Next</a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>
