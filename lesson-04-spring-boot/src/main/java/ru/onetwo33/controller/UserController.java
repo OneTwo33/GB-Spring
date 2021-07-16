@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.onetwo33.persist.User;
 import ru.onetwo33.persist.UserRepository;
-import ru.onetwo33.persist.UserSpecifications;
+import ru.onetwo33.persist.UserSpecification;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -47,13 +46,13 @@ public class UserController {
 
         Specification<User> spec = Specification.where(null);
         if (usernameFilter.isPresent() && !usernameFilter.get().isEmpty()) {
-            spec = spec.and(UserSpecifications.usernamePrefix(usernameFilter.get()));
+            spec = spec.and(UserSpecification.usernamePrefix(usernameFilter.get()));
         }
         if (minAge.isPresent()) {
-            spec = spec.and(UserSpecifications.minAge(minAge.get()));
+            spec = spec.and(UserSpecification.minAge(minAge.get()));
         }
         if (maxAge.isPresent()) {
-            spec = spec.and(UserSpecifications.maxAge(maxAge.get()));
+            spec = spec.and(UserSpecification.maxAge(maxAge.get()));
         }
 
         model.addAttribute("users", userRepository.findAll(spec,

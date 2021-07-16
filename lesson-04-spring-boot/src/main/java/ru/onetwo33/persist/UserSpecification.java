@@ -2,7 +2,7 @@ package ru.onetwo33.persist;
 
 import org.springframework.data.jpa.domain.Specification;
 
-public final class UserSpecifications {
+public final class UserSpecification {
 
     public static Specification<User> usernamePrefix(String prefix) {
         return (root, query, cb) -> cb.like(root.get("username"), prefix + "%");
