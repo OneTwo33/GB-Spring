@@ -1,0 +1,26 @@
+GET localhost:8888/spring-boot-app/api/v1/user/all
+
+###
+
+POST localhost:8888/spring-boot-app/api/v1/user/
+Content-Type: application/json
+
+{
+  "username": "from rest",
+  "age": 43
+}
+
+###
+
+PUT localhost:8888/spring-boot-app/api/v1/user/
+Content-Type: application/json
+
+{
+  "id": 5,
+  "username": "from rest",
+  "age": 22
+}
+
+###
+
+DELETE localhost:8888/spring-boot-app/api/v1/user/5
