@@ -3,57 +3,32 @@ package ru.onetwo33.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.onetwo33.persist.Product;
-import ru.onetwo33.persist.ProductRepository;
-import ru.onetwo33.persist.ProductSpecification;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import ru.onetwo33.service.ProductService;
 
 @Controller
 @RequestMapping("/product")
 public class ProductController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    private ProductRepository productRepository;
+    private final ProductService productService;
 
     @Autowired
-    public void setProductRepository(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping
-    public String listPage(Model model,
-                           @RequestParam("titleFilter") Optional<String> titleFilter,
-                           @RequestParam("minCostFilter") Optional<BigDecimal> minCostFilter,
-                           @RequestParam("maxCostFilter") Optional<BigDecimal> maxCostFilter,
-                           @RequestParam("page") Optional<Integer> page,
-                           @RequestParam("size") Optional<Integer> size,
-                           @RequestParam("sort") Optional<String> sort) {
+    public String listPage(Model model, ProductListParams productListParams) {
         logger.info("Product list page requested");
 
-        Specification<Product> spec = Specification.where(null);
-        if (titleFilter.isPresent() && !titleFilter.get().isEmpty()) {
-            spec = spec.and(ProductSpecification.titlePrefix(titleFilter.get()));
-        }
-        if (minCostFilter.isPresent()) {
-            spec = spec.and(ProductSpecification.minCost(minCostFilter.get()));
-        }
-        if (maxCostFilter.isPresent()) {
-            spec = spec.and(ProductSpecification.maxCost(maxCostFilter.get()));
-        }
-
-        model.addAttribute("products", productRepository.findAll(spec,
-                PageRequest.of(page.orElse(1) - 1, size.orElse(10), Sort.by(sort.orElse("id")))));
-        model.addAttribute("page", page.orElse(1));
+        model.addAttribute("page", productListParams.getPage());
+        model.addAttribute("direction", productListParams.getDirection());
+        model.addAttribute("products", productService.findWithFilter(productListParams));
         return "products";
     }
 
@@ -68,7 +43,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model) {
         logger.info("Edit product page requested");
-        model.addAttribute("product", productRepository.findById(id));
+        model.addAttribute("product", productService.findById(id));
 
         return "product_form";
     }
@@ -76,7 +51,7 @@ public class ProductController {
     @GetMapping("/{id}/delete")
     public String deleteProduct(@PathVariable("id") Long id, Model model) {
         logger.info("Delete product page requested");
-        model.addAttribute("product", productRepository.findById(id));
+        model.addAttribute("product", productService.findById(id));
 
         return "product_delete";
     }
@@ -85,7 +60,7 @@ public class ProductController {
     public String update(Product product) {
         logger.info("Saving product");
 
-        productRepository.save(product);
+        productService.save(product);
         return "redirect:/product";
     }
 
@@ -93,7 +68,7 @@ public class ProductController {
     public String delete(@PathVariable("id") Long id) {
         logger.info("Delete product");
 
-        productRepository.deleteById(id);
+        productService.deleteById(id);
         return "redirect:/product";
     }
 }
