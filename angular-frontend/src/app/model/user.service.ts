@@ -20,7 +20,7 @@ export class UserService {
   constructor(public http: HttpClient) { }
 
   public findAll() {
-    return this.http.get<User[]>('/api/v1/user/all').toPromise()
+    return this.http.get<User[]>('http://194.67.111.234:8080/spring-boot-app/api/v1/user/all').toPromise()
     // return new Promise<User[]>((resolve, reject) => {
     //   resolve(
     //     Object.values(this.users)
@@ -29,7 +29,7 @@ export class UserService {
   }
 
   public findById(id: number) {
-    return this.http.get<User>(`/api/v1/user/${id}`).toPromise()
+    return this.http.get<User>(`http://194.67.111.234:8080/spring-boot-app/api/v1/user/${id}`).toPromise()
     // return new Promise<User>((resolve, reject) => {
     //   resolve(
     //     this.users[id]
@@ -39,9 +39,9 @@ export class UserService {
 
   public save(user: User) {
     if (user.id == -1) {
-      return this.http.post<User>('/api/v1/user', user).toPromise()
+      return this.http.post<User>('http://194.67.111.234:8080/spring-boot-app/api/v1/user', user).toPromise()
     }
-    return this.http.put<User>('/api/v1/user', user).toPromise()
+    return this.http.put<User>('http://194.67.111.234:8080/spring-boot-app/api/v1/user', user).toPromise()
     // return new Promise<void>((resolve, reject) => {
     //   if (user.id == -1) {
     //     user.id = this.identity++
@@ -52,7 +52,7 @@ export class UserService {
   }
 
   public delete(id: number) {
-    return this.http.delete<void>(`/api/v1/user/${id}`).toPromise()
+    return this.http.delete<void>(`http://194.67.111.234:8080/spring-boot-app/api/v1/user/${id}`).toPromise()
     // return new Promise<void>((resolve, reject) => {
     //   delete this.users[id]
     //   resolve()
