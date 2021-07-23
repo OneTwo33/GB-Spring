@@ -32,6 +32,9 @@ public class UserResource {
 
     @PostMapping(produces = "application/json")
     public User create(@RequestBody User user) {
+        if (user.getId() == -1) { // Из ангуляра приходит -1
+            user.setId(null);
+        }
         if (user.getId() != null) {
             throw new BadRequestException("User Id should be null");
         }

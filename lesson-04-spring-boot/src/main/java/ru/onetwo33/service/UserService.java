@@ -5,7 +5,6 @@ import ru.onetwo33.controller.UserListParams;
 import ru.onetwo33.persist.User;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
