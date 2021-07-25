@@ -1,6 +1,6 @@
 {
   "/api/*": {
-    "target": "http://194.67.111.234:8080/spring-boot-app",
+    "target": "http://localhost:8080/spring-boot-app",
     "secure": false,
     "loglevel": "debug",
     "changeOrigin": true
