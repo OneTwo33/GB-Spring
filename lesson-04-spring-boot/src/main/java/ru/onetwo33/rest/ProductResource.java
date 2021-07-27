@@ -32,6 +32,9 @@ public class ProductResource {
 
     @PostMapping(produces = "application/json")
     public Product create(@RequestBody Product product) {
+        if (product.getId() == -1) {
+            product.setId(null);
+        }
         if (product.getId() != null) {
             throw new BadRequestException("Product Id should be null");
         }
