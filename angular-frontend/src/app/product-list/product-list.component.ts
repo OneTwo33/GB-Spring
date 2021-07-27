@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Product} from "../model/product";
 import {ProductService} from "../model/product.service";
+import {ProductHttpParams} from "../model/productHttpParams";
 
 @Component({
   selector: 'app-product-list',
@@ -11,6 +12,7 @@ export class ProductListComponent implements OnInit {
 
   public products: Product[] = []
   public isError: boolean = false
+  public httpParams: ProductHttpParams = new ProductHttpParams()
 
   constructor(public productService: ProductService) { }
 
@@ -18,8 +20,8 @@ export class ProductListComponent implements OnInit {
     this.retrieveProducts()
   }
 
-  private retrieveProducts() {
-    this.productService.findAll()
+  public retrieveProducts() {
+    this.productService.findAll(this.httpParams)
       .then(res => {
         this.isError = false
         this.products = res
@@ -35,5 +37,9 @@ export class ProductListComponent implements OnInit {
       .then(() => {
         this.retrieveProducts()
       })
+  }
+
+  update() {
+    this.retrieveProducts()
   }
 }

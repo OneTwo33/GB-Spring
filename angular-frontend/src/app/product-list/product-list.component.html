@@ -3,28 +3,25 @@
     <a class="btn btn-primary" routerLink="/product/new">Add Product</a>
   </div>
 
-<!--  <div class="col-12 mt-3">-->
-<!--    <form class="form-inline" th:method="get">-->
-<!--      <div class="form-group mb-2 mr-2">-->
-<!--        <label for="titleFilter" class="sr-only">Title filter</label>-->
-<!--        <input type="text" class="form-control" id="titleFilter" th:value="${param.titleFilter}"-->
-<!--               name="titleFilter" placeholder="Title filter">-->
-<!--      </div>-->
+  <div class="col-12 mt-3">
+    <form class="form-inline" (ngSubmit)="update()">
+      <div class="form-group mb-2 mr-2">
+        <label for="titleFilter" class="sr-only">Title filter</label>
+        <input type="text" class="form-control" id="titleFilter" name="titleFilter" [(ngModel)]="httpParams.titleFilter" placeholder="Title filter">
+      </div>
 
-<!--      <div class="form-group mb-2 mr-2">-->
-<!--        <label for="minCostFilter" class="sr-only">Min cost filter</label>-->
-<!--        <input type="number" class="form-control" id="minCostFilter" th:value="${param.minCostFilter}"-->
-<!--               name="minCostFilter" placeholder="Min cost filter">-->
-<!--      </div>-->
+      <div class="form-group mb-2 mr-2">
+        <label for="minCostFilter" class="sr-only">Min cost filter</label>
+        <input type="number" class="form-control" id="minCostFilter" name="minCostFilter" [(ngModel)]="httpParams.minCostFilter" placeholder="Min cost filter">
+      </div>
 
-<!--      <div class="form-group mb-2 mr-2">-->
-<!--        <label for="maxCostFilter" class="sr-only">Max cost filter</label>-->
-<!--        <input type="number" class="form-control" id="maxCostFilter" th:value="${param.maxCostFilter}"-->
-<!--               name="maxCostFilter" placeholder="Max cost filter">-->
-<!--      </div>-->
-<!--      <button type="submit" class="btn btn-primary mb-2">Apply</button>-->
-<!--    </form>-->
-<!--  </div>-->
+      <div class="form-group mb-2 mr-2">
+        <label for="maxCostFilter" class="sr-only">Max cost filter</label>
+        <input type="number" class="form-control" id="maxCostFilter" name="maxCostFilter" [(ngModel)]="httpParams.maxCostFilter" placeholder="Max cost filter">
+      </div>
+      <button type="submit" class="btn btn-primary mb-2">Apply</button>
+    </form>
+  </div>
 
   <div class="col-12">
     <table class="table table-bordered my-2">

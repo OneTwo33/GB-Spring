@@ -1,8 +1,10 @@
 package ru.onetwo33.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.onetwo33.controller.NotFoundException;
+import ru.onetwo33.controller.ProductListParams;
 import ru.onetwo33.persist.Product;
 import ru.onetwo33.service.ProductService;
 
@@ -20,8 +22,9 @@ public class ProductResource {
     }
 
     @GetMapping(path = "/all", produces = "application/json")
-    public List<Product> findAll() {
-        return productService.findAll();
+    public List<Product> findAll(ProductListParams productListParams) {
+        Page<Product> withFilter = productService.findWithFilter(productListParams);
+        return withFilter.getContent();
     }
 
     @GetMapping(path = "/{id}", produces = "application/json")
