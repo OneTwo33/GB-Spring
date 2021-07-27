@@ -9,9 +9,6 @@ export class UserService {
 
   private identity: number = 6
 
-  // deploy only, for dev uses proxy.json.conf and start node server 'ng serve'
-  private url: string = 'http://localhost:8080/spring-boot-app'
-
   private users: { [key: number]: User } = {
     1: new User(1, 'First user', 18),
     2: new User(2, 'Second user', 27),
@@ -23,7 +20,7 @@ export class UserService {
   constructor(public http: HttpClient) { }
 
   public findAll() {
-    return this.http.get<User[]>(this.url + '/api/v1/user/all').toPromise()
+    return this.http.get<User[]>('/api/v1/user/all').toPromise()
     // return new Promise<User[]>((resolve, reject) => {
     //   resolve(
     //     Object.values(this.users)
@@ -32,7 +29,7 @@ export class UserService {
   }
 
   public findById(id: number) {
-    return this.http.get<User>(this.url + `/api/v1/user/${id}`).toPromise()
+    return this.http.get<User>(`/api/v1/user/${id}`).toPromise()
     // return new Promise<User>((resolve, reject) => {
     //   resolve(
     //     this.users[id]
@@ -42,9 +39,9 @@ export class UserService {
 
   public save(user: User) {
     if (user.id == -1) {
-      return this.http.post<User>(this.url + '/api/v1/user', user).toPromise()
+      return this.http.post<User>('/api/v1/user', user).toPromise()
     }
-    return this.http.put<User>(this.url + '/api/v1/user', user).toPromise()
+    return this.http.put<User>('/api/v1/user', user).toPromise()
     // return new Promise<void>((resolve, reject) => {
     //   if (user.id == -1) {
     //     user.id = this.identity++
@@ -55,7 +52,7 @@ export class UserService {
   }
 
   public delete(id: number) {
-    return this.http.delete<void>(this.url + `/api/v1/user/${id}`).toPromise()
+    return this.http.delete<void>(`/api/v1/user/${id}`).toPromise()
     // return new Promise<void>((resolve, reject) => {
     //   delete this.users[id]
     //   resolve()

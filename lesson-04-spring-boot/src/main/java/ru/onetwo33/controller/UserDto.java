@@ -1,33 +1,23 @@
-package ru.onetwo33.persist;
+package ru.onetwo33.controller;
 
-import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
-@Entity
-@Table(name = "users")
-public class User {
+public class UserDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @NotBlank
     private String username;
 
-    @Column(name = "age", nullable = false)
+    @Min(value = 18)
     private Integer age;
 
-    @Column(name = "password")
     private String password;
 
-    public User() {
-    }
-
-    public User(Long id, String username, String password, Integer age) {
+    public UserDto(Long id, String username, Integer age) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.age = age;
     }
 
@@ -61,14 +51,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", age=" + age +
-                '}';
     }
 }

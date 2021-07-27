@@ -1,6 +1,7 @@
 package ru.onetwo33.service;
 
 import org.springframework.data.domain.Page;
+import ru.onetwo33.controller.UserDto;
 import ru.onetwo33.controller.UserListParams;
 import ru.onetwo33.persist.User;
 
@@ -9,13 +10,13 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> findAll();
+    List<UserDto> findAll();
 
-    Page<User> findWithFilter(UserListParams userListParams);
+    Page<UserDto> findWithFilter(UserListParams userListParams);
 
-    Optional<User> findById(Long id);
+    Optional<UserDto> findById(Long id);
 
-    void save(User user);
+    void save(UserDto userDto);
 
     void deleteById(Long id);
 }

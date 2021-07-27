@@ -61,14 +61,14 @@ public class UserController {
     }
 
     @PostMapping
-    public String update(@Valid User user, BindingResult result) {
+    public String update(@Valid UserDto userDto, BindingResult result) {
         logger.info("Saving user");
 
         if (result.hasErrors()) {
             return "user_form";
         }
 
-        userService.save(user);
+        userService.save(userDto);
         return "redirect:/user";
     }
 

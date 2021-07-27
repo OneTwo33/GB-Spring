@@ -3,6 +3,7 @@ package ru.onetwo33.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.onetwo33.controller.NotFoundException;
+import ru.onetwo33.controller.UserDto;
 import ru.onetwo33.persist.User;
 import ru.onetwo33.service.UserService;
 
@@ -20,34 +21,34 @@ public class UserResource {
     }
 
     @GetMapping(path = "/all", produces = "application/json")
-    public List<User> findAll() {
+    public List<UserDto> findAll() {
         return userService.findAll();
     }
 
     @GetMapping(path = "/{id}", produces = "application/json")
-    public User findById(@PathVariable("id") Long id) {
+    public UserDto findById(@PathVariable("id") Long id) {
         return userService.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @PostMapping(produces = "application/json")
-    public User create(@RequestBody User user) {
-        if (user.getId() == -1) { // Из ангуляра приходит -1
-            user.setId(null);
+    public UserDto create(@RequestBody UserDto userDto) {
+        if (userDto.getId() == -1) { // Из ангуляра приходит -1
+            userDto.setId(null);
         }
-        if (user.getId() != null) {
+        if (userDto.getId() != null) {
             throw new BadRequestException("User Id should be null");
         }
-        userService.save(user);
-        return user;
+        userService.save(userDto);
+        return userDto;
     }
 
     @PutMapping(produces = "application/json")
-    public void update(@RequestBody User user) {
-        if (user.getId() == null) {
+    public void update(@RequestBody UserDto userDto) {
+        if (userDto.getId() == null) {
             throw new BadRequestException("User Id shouldn't be null");
         }
-        userService.save(user);
+        userService.save(userDto);
     }
 
     @DeleteMapping(path = "/{id}", produces = "application/json")
