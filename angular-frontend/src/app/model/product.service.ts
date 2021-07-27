@@ -9,7 +9,7 @@ import {ProductHttpParams} from "./productHttpParams";
 export class ProductService {
 
   // deploy only, for dev uses proxy.json.conf and start node server 'ng serve'
-  private url: string = 'http://localhost:8888/spring-boot-app'
+  private url: string = 'http://localhost:8080/spring-boot-app'
 
   constructor(public http: HttpClient) { }
 
