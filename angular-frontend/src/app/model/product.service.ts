@@ -8,9 +8,6 @@ import {ProductHttpParams} from "./productHttpParams";
 })
 export class ProductService {
 
-  // deploy only, for dev uses proxy.json.conf and start node server 'ng serve'
-  private url: string = 'http://localhost:8080/spring-boot-app'
-
   constructor(public http: HttpClient) { }
 
   public findAll(httpParams: ProductHttpParams) {
@@ -38,21 +35,21 @@ export class ProductService {
       params = params.set('page', httpParams.page)
     }
 
-    return this.http.get<Product[]>(this.url + '/api/v1/product/all', {params}).toPromise()
+    return this.http.get<Product[]>('/api/v1/product/all', {params}).toPromise()
   }
 
   public findById(id: number) {
-    return this.http.get<Product>(this.url + `/api/v1/product/${id}`).toPromise()
+    return this.http.get<Product>(`/api/v1/product/${id}`).toPromise()
   }
 
   public save(product: Product) {
     if (product.id == -1) {
-      return this.http.post<Product>(this.url + '/api/v1/product', product).toPromise()
+      return this.http.post<Product>('/api/v1/product', product).toPromise()
     }
-    return this.http.put<Product>(this.url + '/api/v1/product', product).toPromise()
+    return this.http.put<Product>('/api/v1/product', product).toPromise()
   }
 
   public delete(id: number) {
-    return this.http.delete<void>(this.url + `/api/v1/product/${id}`).toPromise()
+    return this.http.delete<void>(`/api/v1/product/${id}`).toPromise()
   }
 }
