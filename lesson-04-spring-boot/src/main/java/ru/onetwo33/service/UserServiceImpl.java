@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.onetwo33.controller.NotFoundException;
 import ru.onetwo33.controller.UserDto;
 import ru.onetwo33.controller.UserListParams;
 import ru.onetwo33.persist.User;
@@ -50,11 +51,19 @@ public class UserServiceImpl implements UserService {
             spec = spec.and(UserSpecification.maxAge(userListParams.getMaxAge()));
         }
 
-        return userRepository.findAll(spec,
-                PageRequest.of(Optional.ofNullable(userListParams.getPage()).orElse(1) - 1,
-                        Optional.ofNullable(userListParams.getSize()).orElse(3),
-                        Sort.by(Optional.ofNullable(userListParams.getSortField()).orElse("id"))))
-                .map(user -> new UserDto(user.getId(), user.getUsername(), user.getAge()));
+        if ("desc".equals(userListParams.getDirection())) {
+            return userRepository.findAll(spec,
+                    PageRequest.of(Optional.ofNullable(userListParams.getPage()).orElse(1) - 1,
+                            Optional.ofNullable(userListParams.getSize()).orElse(10),
+                            Sort.by(Sort.Direction.DESC ,Optional.ofNullable(userListParams.getSortField()).orElse("id"))))
+                    .map(user -> new UserDto(user.getId(), user.getUsername(), user.getAge()));
+        } else {
+            return userRepository.findAll(spec,
+                    PageRequest.of(Optional.ofNullable(userListParams.getPage()).orElse(1) - 1,
+                            Optional.ofNullable(userListParams.getSize()).orElse(10),
+                            Sort.by(Sort.Direction.ASC ,Optional.ofNullable(userListParams.getSortField()).orElse("id"))))
+                    .map(user -> new UserDto(user.getId(), user.getUsername(), user.getAge()));
+        }
     }
 
     @Override
@@ -65,11 +74,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserDto userDto) {
-        User user = new User(
-                userDto.getId(),
-                userDto.getUsername(),
-                passwordEncoder.encode(userDto.getPassword()),
-                userDto.getAge());
+        User user = new User();
+
+        if (userDto.getPassword().equals("") || userDto.getPassword() == null) {
+            User existing = userRepository.findById(userDto.getId())
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+            user.setPassword(existing.getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
+
+        user.setId(userDto.getId());
+        user.setUsername(userDto.getUsername());
+        user.setAge(userDto.getAge());
+
         userRepository.save(user);
     }
 
