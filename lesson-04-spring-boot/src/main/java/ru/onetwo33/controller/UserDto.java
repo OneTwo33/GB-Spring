@@ -15,6 +15,9 @@ public class UserDto {
 
     private String password;
 
+    public UserDto() {
+    }
+
     public UserDto(Long id, String username, Integer age) {
         this.id = id;
         this.username = username;

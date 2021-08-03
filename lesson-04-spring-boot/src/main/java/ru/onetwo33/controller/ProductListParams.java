@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 
 public class ProductListParams {
 
-    String titleFilter;
-    BigDecimal minCostFilter;
-    BigDecimal maxCostFilter;
-    Integer page = 1;
-    Integer size;
-    String sort;
-    String direction = "asc";
+    private String titleFilter;
+    private BigDecimal minCostFilter;
+    private BigDecimal maxCostFilter;
+    private Integer page = 1;
+    private Integer size;
+    private String sort;
+    private String direction = "asc";
 
     public String getTitleFilter() {
         return titleFilter;

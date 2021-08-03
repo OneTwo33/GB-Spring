@@ -2,8 +2,12 @@
     xmlns:th="http://www.thymeleaf.org">
 
     <th scope="col" th:fragment="sort_header (header, column)">[[${header}]]
-        <a th:href="@{/user(page=${param.page}, size=${users.size}, usernameFilter=${param.usernameFilter},
-                               minAge=${param.minAge}, maxAge=${param.maxAge}, sortField=${column})}"><i class="fa fa-sort-down"></i></a>
+        <a th:href="@{/user(page=${page}, size=${users.size}, usernameFilter=${param.usernameFilter},
+                               minAge=${param.minAge}, maxAge=${param.maxAge}, sortField=${column},
+                               direction=${direction.equals('asc')} ? 'desc' : 'asc')}">
+            <i class="fa"
+               th:classappend="${direction.equals('asc')} ? 'fa-sort-down' : 'fa-sort-up'"></i>
+        </a>
     </th>
 
 </html>

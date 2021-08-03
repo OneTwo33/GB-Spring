@@ -5,9 +5,10 @@ public class UserListParams {
     private String usernameFilter;
     private Integer minAge;
     private Integer maxAge;
-    private Integer page;
+    private Integer page = 1;
     private Integer size;
     private String sortField;
+    private String direction = "asc";
 
     public String getUsernameFilter() {
         return usernameFilter;
@@ -55,5 +56,13 @@ public class UserListParams {
 
     public void setSortField(String sortField) {
         this.sortField = sortField;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 }

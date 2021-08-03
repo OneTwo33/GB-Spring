@@ -31,6 +31,8 @@ public class UserController {
     public String listPage(Model model, UserListParams userListParams) {
         logger.info("User list page requested");
 
+        model.addAttribute("page", userListParams.getPage());
+        model.addAttribute("direction", userListParams.getDirection());
         model.addAttribute("users", userService.findWithFilter(userListParams));
         return "users";
     }
@@ -39,20 +41,21 @@ public class UserController {
     public String newUserForm(Model model) {
         logger.info("New user page requested");
 
-        model.addAttribute("user", new User());
+        model.addAttribute("userDto", new UserDto());
         return "user_form";
     }
 
     @GetMapping("/{id}")
     public String editUser(@PathVariable("id") Long id, Model model) {
         logger.info("Edit user page requested");
+        UserDto dto = userService.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
 
-        model.addAttribute("user", userService.findById(id)
+        model.addAttribute("userDto", userService.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found")));
         return "user_form";
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
         logger.info("Deleting user with id {}", id);
 
@@ -61,10 +64,15 @@ public class UserController {
     }
 
     @PostMapping
-    public String update(@Valid UserDto userDto, BindingResult result) {
+    public String update(@Valid UserDto userDto, BindingResult result, @RequestParam("repeatPassword") String repeatPassword) {
         logger.info("Saving user");
 
         if (result.hasErrors()) {
+            return "user_form";
+        }
+
+        if (!userDto.getPassword().equals(repeatPassword)) {
+            result.rejectValue("password", "repeatPassword", "Пароли должны совпадать!");
             return "user_form";
         }
 
