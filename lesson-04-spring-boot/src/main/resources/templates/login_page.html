@@ -12,15 +12,19 @@
 <div class="container">
     <div class="row py-2">
         <div class="col-12">
-            <form th:action="@{/product}" method="post" th:object="${product}">
-                <input type="hidden" id="id" th:field="*{id}">
+            <form th:action="@{/login_processing}" method="post">
                 <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" class="form-control" th:field="*{title}" id="title" placeholder="Enter title product" />
-                    <label>Cost</label>
-                    <input type="text" class="form-control" th:field="*{cost}" id="cost" placeholder="Enter cost product" />
+                    <label>Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" />
+                    <p class="text-danger" th:if="${param.error != null}">Incorrect login or password</p>
+                    <p class="text-success" th:if="${param.logout != null}">Logout successful</p>
                 </div>
-                <button class="btn btn-primary" type="submit">Sumbit</button>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" />
+                </div>
+                <button class="btn btn-primary" type="submit">Login</button>
+                <a class="px-3" href="#">Register</a>
             </form>
         </div>
     </div>

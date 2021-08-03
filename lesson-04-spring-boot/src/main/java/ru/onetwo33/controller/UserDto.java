@@ -2,6 +2,8 @@ package ru.onetwo33.controller;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.Set;
 
 public class UserDto {
 
@@ -15,13 +17,16 @@ public class UserDto {
 
     private String password;
 
+    private Set<RoleDto> roles;
+
     public UserDto() {
     }
 
-    public UserDto(Long id, String username, Integer age) {
+    public UserDto(Long id, String username, Integer age, Set<RoleDto> roles) {
         this.id = id;
         this.username = username;
         this.age = age;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -54,5 +59,13 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<RoleDto> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleDto> roles) {
+        this.roles = roles;
     }
 }

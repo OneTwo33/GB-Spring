@@ -9,10 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.onetwo33.persist.User;
+import ru.onetwo33.persist.RoleRepository;
 import ru.onetwo33.service.UserService;
 
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -22,9 +23,12 @@ public class UserController {
 
     private UserService userService;
 
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping
@@ -52,6 +56,9 @@ public class UserController {
 
         model.addAttribute("userDto", userService.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found")));
+        model.addAttribute("roles", roleRepository.findAll().stream()
+                .map(role -> new RoleDto(role.getId(), role.getName()))
+                .collect(Collectors.toSet()));
         return "user_form";
     }
 
@@ -64,14 +71,21 @@ public class UserController {
     }
 
     @PostMapping
-    public String update(@Valid UserDto userDto, BindingResult result, @RequestParam("repeatPassword") String repeatPassword) {
+    public String update(@Valid UserDto userDto, BindingResult result, @RequestParam("repeatPassword") String repeatPassword,
+                         Model model) {
         logger.info("Saving user");
 
         if (result.hasErrors()) {
+            model.addAttribute("roles", roleRepository.findAll().stream()
+                    .map(role -> new RoleDto(role.getId(), role.getName()))
+                    .collect(Collectors.toSet()));
             return "user_form";
         }
 
         if (!userDto.getPassword().equals(repeatPassword)) {
+            model.addAttribute("roles", roleRepository.findAll().stream()
+                    .map(role -> new RoleDto(role.getId(), role.getName()))
+                    .collect(Collectors.toSet()));
             result.rejectValue("password", "repeatPassword", "Пароли должны совпадать!");
             return "user_form";
         }
