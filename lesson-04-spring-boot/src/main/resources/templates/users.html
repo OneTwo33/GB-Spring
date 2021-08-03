@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:replace="fragments/head :: head">
 </head>
@@ -11,7 +11,7 @@
 
 <div class="container">
     <div class="row py-2">
-        <div class="col-12">
+        <div class="col-12" sec:authorize="hasRole('SUPER_ADMIN')">
             <a class="btn btn-primary" th:href="@{/user/new}">Add User</a>
         </div>
 
@@ -44,7 +44,7 @@
                     <th scope="col" th:replace="fragments/sort_header :: sort_header ('Id', 'id')"></th>
                     <th scope="col" th:replace="fragments/sort_header :: sort_header ('Username', 'username')"></th>
                     <th scope="col" th:replace="fragments/sort_header :: sort_header ('Age', 'age')"></th>
-                    <th scope="col">Actions</th>
+                    <th scope="col" sec:authorize="hasRole('SUPER_ADMIN')">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -52,7 +52,7 @@
                     <th scope="row" th:text="${user.id}">1</th>
                     <td th:text="${user.username}">Alex</td>
                     <td th:text="${user.age}">22</td>
-                    <td>
+                    <td sec:authorize="hasRole('SUPER_ADMIN')">
                         <a class="btn btn-success" th:href="@{/user/{id}(id = ${user.id})}"><i class="fas fa-edit"></i></a>
                         <form class="d-inline" th:method="delete" th:action="@{/user/{id}(id = ${user.id})}">
                             <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>

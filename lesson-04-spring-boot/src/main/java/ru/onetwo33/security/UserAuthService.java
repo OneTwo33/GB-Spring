@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.onetwo33.persist.UserRepository;
 
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Service
 public class UserAuthService implements UserDetailsService {
@@ -27,7 +28,10 @@ public class UserAuthService implements UserDetailsService {
                 .map(user -> new User(
                         user.getUsername(),
                         user.getPassword(),
-                        Collections.singletonList(new SimpleGrantedAuthority("ADMIN"))
+                        user.getRoles().stream()
+                                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                                .collect(Collectors.toSet())
+//                        Collections.singletonList(new SimpleGrantedAuthority("ADMIN"))
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }

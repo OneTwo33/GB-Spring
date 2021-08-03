@@ -38,9 +38,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream()
                 .map(user -> new UserDto(user.getId(),
                         user.getUsername(),
-                        user.getAge(),
-                        mapRolesDto(user)
-                ))
+                        user.getAge()))
                 .collect(Collectors.toList());
     }
 
@@ -63,13 +61,13 @@ public class UserServiceImpl implements UserService {
                     PageRequest.of(Optional.ofNullable(userListParams.getPage()).orElse(1) - 1,
                             Optional.ofNullable(userListParams.getSize()).orElse(10),
                             Sort.by(Sort.Direction.DESC ,Optional.ofNullable(userListParams.getSortField()).orElse("id"))))
-                    .map(user -> new UserDto(user.getId(), user.getUsername(), user.getAge(), mapRolesDto(user)));
+                    .map(user -> new UserDto(user.getId(), user.getUsername(), user.getAge()));
         } else {
             return userRepository.findAll(spec,
                     PageRequest.of(Optional.ofNullable(userListParams.getPage()).orElse(1) - 1,
                             Optional.ofNullable(userListParams.getSize()).orElse(10),
                             Sort.by(Sort.Direction.ASC ,Optional.ofNullable(userListParams.getSortField()).orElse("id"))))
-                    .map(user -> new UserDto(user.getId(), user.getUsername(), user.getAge(), mapRolesDto(user)));
+                    .map(user -> new UserDto(user.getId(), user.getUsername(), user.getAge()));
         }
     }
 
@@ -89,6 +87,10 @@ public class UserServiceImpl implements UserService {
             user.setPassword(existing.getPassword());
         } else {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
+
+        if (userDto.getRoles().isEmpty()) {
+            user.setRoles((Set<Role>) new Role(2L, "ROLE_GUEST"));
         }
 
         user.setId(userDto.getId());
