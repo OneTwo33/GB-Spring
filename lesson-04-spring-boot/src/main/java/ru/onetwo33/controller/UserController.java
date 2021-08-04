@@ -46,6 +46,7 @@ public class UserController {
         logger.info("New user page requested");
 
         model.addAttribute("userDto", new UserDto());
+        model.addAttribute("roles", roleRepository.findAll());
         return "user_form";
     }
 
@@ -55,9 +56,7 @@ public class UserController {
 
         model.addAttribute("userDto", userService.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found")));
-        model.addAttribute("roles", roleRepository.findAll().stream()
-                .map(role -> new RoleDto(role.getId(), role.getName()))
-                .collect(Collectors.toList()));
+        model.addAttribute("roles", roleRepository.findAll());
         return "user_form";
     }
 

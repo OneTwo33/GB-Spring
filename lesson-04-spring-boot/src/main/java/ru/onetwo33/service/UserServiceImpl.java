@@ -16,9 +16,7 @@ import ru.onetwo33.persist.User;
 import ru.onetwo33.persist.UserRepository;
 import ru.onetwo33.persist.UserSpecification;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,16 +87,19 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
 
-        if (userDto.getRoles().isEmpty()) {
-            user.setRoles((Set<Role>) new Role(2L, "ROLE_GUEST"));
+        if (userDto.getRoles() == null || userDto.getRoles().isEmpty()) {
+            Set<Role> roles = new HashSet<>();
+            roles.add(new Role(2L, "ROLE_GUEST"));
+            user.setRoles(roles);
+        } else {
+            user.setRoles(userDto.getRoles().stream()
+                    .map(roleDto -> new Role(roleDto.getId(), roleDto.getName()))
+                    .collect(Collectors.toSet()));
         }
 
         user.setId(userDto.getId());
         user.setUsername(userDto.getUsername());
         user.setAge(userDto.getAge());
-        user.setRoles(userDto.getRoles().stream()
-                .map(roleDto -> new Role(roleDto.getId(), roleDto.getName()))
-                .collect(Collectors.toSet()));
 
         userRepository.save(user);
     }
