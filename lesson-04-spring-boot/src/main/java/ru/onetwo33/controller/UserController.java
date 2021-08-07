@@ -46,19 +46,17 @@ public class UserController {
         logger.info("New user page requested");
 
         model.addAttribute("userDto", new UserDto());
+        model.addAttribute("roles", roleRepository.findAll());
         return "user_form";
     }
 
     @GetMapping("/{id}")
     public String editUser(@PathVariable("id") Long id, Model model) {
         logger.info("Edit user page requested");
-        UserDto dto = userService.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
 
         model.addAttribute("userDto", userService.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found")));
-        model.addAttribute("roles", roleRepository.findAll().stream()
-                .map(role -> new RoleDto(role.getId(), role.getName()))
-                .collect(Collectors.toSet()));
+        model.addAttribute("roles", roleRepository.findAll());
         return "user_form";
     }
 
@@ -78,14 +76,14 @@ public class UserController {
         if (result.hasErrors()) {
             model.addAttribute("roles", roleRepository.findAll().stream()
                     .map(role -> new RoleDto(role.getId(), role.getName()))
-                    .collect(Collectors.toSet()));
+                    .collect(Collectors.toList()));
             return "user_form";
         }
 
         if (!userDto.getPassword().equals(repeatPassword)) {
             model.addAttribute("roles", roleRepository.findAll().stream()
                     .map(role -> new RoleDto(role.getId(), role.getName()))
-                    .collect(Collectors.toSet()));
+                    .collect(Collectors.toList()));
             result.rejectValue("password", "repeatPassword", "Пароли должны совпадать!");
             return "user_form";
         }

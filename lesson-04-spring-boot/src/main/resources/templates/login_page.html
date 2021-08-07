@@ -12,7 +12,7 @@
 <div class="container">
     <div class="row py-2">
         <div class="col-12">
-            <form th:action="@{/login_processing}" method="post">
+            <form th:action="@{/login}" method="post">
                 <div class="form-group">
                     <label>Username</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" />
@@ -24,7 +24,7 @@
                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" />
                 </div>
                 <button class="btn btn-primary" type="submit">Login</button>
-                <a class="px-3" href="#">Register</a>
+                <a class="px-3" th:href="@{/user/new}">Register</a>
             </form>
         </div>
     </div>

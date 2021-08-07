@@ -2,6 +2,7 @@ package ru.onetwo33.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,11 +37,13 @@ public class SecurityConfig {
                     .authorizeRequests()
                     .antMatchers("/**/*.css", "/**/*.js").permitAll()
                     .antMatchers("/product/**").permitAll()
-                    .antMatchers("/user/**").hasRole("ADMIN")
+                    .antMatchers("/user/new").permitAll()
+                    .antMatchers(HttpMethod.POST, "/user").permitAll()
+                    .antMatchers("/user/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+                    .antMatchers("/access_denied").authenticated()
                     .and()
                     .formLogin()
                     .loginPage("/login")
-                    .loginProcessingUrl("/login_processing")
                     .defaultSuccessUrl("/user")
                     .and()
                     .exceptionHandling()
